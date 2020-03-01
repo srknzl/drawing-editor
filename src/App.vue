@@ -1,65 +1,90 @@
 <template>
   <div id="app">
-    <b-button v-b-toggle.collapse-1 variant="primary">{{
-      visible ? "Hide Canvas Settings" : "Show Canvas Settings"
-    }}</b-button>
+    <b-container>
+      <b-row align-h="center">
+        <b-button v-b-toggle.collapse-1 variant="primary">{{
+          visible ? "Hide Canvas Settings" : "Show Canvas Settings"
+        }}</b-button>
+      </b-row>
+      <b-row align-h="center">
+        <b-collapse
+          style="zIndex:1; background-color: darkblue;"
+          id="collapse-1"
+          class="mt-2"
+          v-model="visible"
+        >
+          <b-form>
+            <label class="white" for="width">Width</label>
+            <b-form-input
+              id="width"
+              v-model="width"
+              type="range"
+              min="100"
+              :max="window.innerWidth"
+            ></b-form-input>
+            <p class="white">Width: {{ width }}</p>
 
-    <b-collapse
-      style="zIndex:1; background-color: darkblue;"
-      id="collapse-1"
-      class="mt-2"
-      v-model="visible"
-    >
-      <b-form>
-        <label class="white" for="width">Width</label>
-        <b-form-input
-          id="width"
-          v-model="width"
-          type="range"
-          min="100"
-          :max="window.innerWidth"
-        ></b-form-input>
-        <p class="white">Width: {{ width }}</p>
+            <label class="white" for="height">Height</label>
+            <b-form-input
+              id="height"
+              v-model="height"
+              type="range"
+              min="100"
+              :max="window.innerHeight"
+            ></b-form-input>
+            <p class="white">Height: {{ height }}</p>
+          </b-form>
 
-        <label class="white" for="height">Height</label>
-        <b-form-input
-          id="height"
-          v-model="height"
-          type="range"
-          min="100"
-          :max="window.innerHeight"
-        ></b-form-input>
-        <p class="white">Height: {{ height }}</p>
-      </b-form>
-
-      <p class="white">Select Color:</p>
-      <verte v-model="backgroundColor"></verte>
-    </b-collapse>
-    <br />
-    <b-button-group class="menu">
-      <b-button
-        v-b-tooltip.hover
-        title="Draw a circle by first clicking on center point, then a point that will be on the border."
-      >
-        Circle </b-button
-      ><b-button
-        v-b-tooltip.hover
-        title="Draw a line by clicking to two points"
-      >
-        Line </b-button
-      ><b-button
-        v-b-tooltip.hover
-        title="Draw a rectangle or square by clicking on two points that are on the diagonal."
-      >
-        Rectangle/Square
-      </b-button>
-    </b-button-group>
-    <Canvas
-      id="canvas"
-      :width="+width"
-      :height="+height"
-      :backgroundColor="backgroundColor"
-    ></Canvas>
+          <p class="white">Select Color:</p>
+          <verte
+            picker="wheel"
+            model="rgb"
+            value="#f00"
+            v-model="backgroundColor"
+          ></verte>
+        </b-collapse>
+      </b-row>
+      <b-row align-h="center">
+        <p style="color: white;">Current Selection: {{ currentSelection }}</p>
+      </b-row>
+      <b-row align-h="center">
+        <b-button-group class="menu">
+          <b-button
+            @click="onCircleSelect"
+            v-b-tooltip.hover
+            title="Draw a circle by first clicking on center point, then a point that will be on the border."
+            >Circle</b-button
+          >
+          <b-button
+            @click="onLineSelect"
+            v-b-tooltip.hover
+            title="Draw a line by clicking to two points"
+            >Line</b-button
+          >
+          <b-button
+            v-b-tooltip.hover
+            @click="onRectSelect"
+            title="Draw a rectangle or square by clicking on two points that are on the diagonal."
+            >Rectangle/Square</b-button
+          >
+          <b-button
+            v-b-tooltip.hover
+            @click="onDeselect"
+            title="Press this if you do not want to add the shape you selected."
+            >Cancel selection</b-button
+          >
+        </b-button-group>
+      </b-row>
+      <b-row align-h="center">
+        <Canvas
+          :mouseMove="onMouseMove"
+          id="canvas"
+          :width="+width"
+          :height="+height"
+          :backgroundColor="backgroundColor"
+        ></Canvas>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -72,12 +97,30 @@ export default Vue.extend({
     return {
       width: 100,
       height: 100,
-      backgroundColor: "",
-      visible: false
+      backgroundColor: "#f00",
+      visible: false,
+      currentSelection: ""
     };
   },
   components: {
     Canvas
+  },
+  methods: {
+    onCircleSelect() {
+      this.currentSelection = "Circle";
+    },
+    onRectSelect() {
+      this.currentSelection = "Rectangle/Square";
+    },
+    onLineSelect() {
+      this.currentSelection = "Line";
+    },
+    onDeselect() {
+      this.currentSelection = "";
+    },
+    onMouseMove(event: MouseEvent) {
+      console.log(event);
+    }
   }
 });
 </script>

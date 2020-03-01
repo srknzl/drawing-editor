@@ -1,6 +1,7 @@
 <template>
   <div
     id="canvas"
+    @mousemove="this.$props.mouseMove"
     :style="{
       width: this.$props.width + 'px',
       height: this.$props.height + 'px',
@@ -15,11 +16,13 @@ export default Vue.extend({
   props: {
     width: Number,
     height: Number,
-    backgroundColor: String
+    backgroundColor: String,
+    mouseMove: Function
   },
   data: function() {
     return {};
-  }
+  },
+  methods: {}
 });
 </script>
 
