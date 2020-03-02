@@ -44,7 +44,7 @@
           <verte
             picker="wheel"
             model="rgb"
-            value="#f00"
+            value="#00f"
             v-model="backgroundColor"
           ></verte>
         </b-collapse>
@@ -86,24 +86,7 @@
       <b-row align-h="center">
         <b-button-group class="otherMenu">
           <b-button @click="onDeleteCircles">Delete Circles</b-button>
-          <!-- <b-button
-            @click="onLineSelect"
-            v-b-tooltip.hover
-            title="Draw a line by clicking to two points"
-            >Line</b-button
-          >
-          <b-button
-            v-b-tooltip.hover
-            @click="onRectSelect"
-            title="Draw a rectangle or square by clicking on two points that are on the diagonal."
-            >Rectangle/Square</b-button
-          >
-          <b-button
-            v-b-tooltip.hover
-            @click="onDeselect"
-            title="Press this if you do not want to add the shape you selected."
-            >Cancel selection</b-button
-          > -->
+          <b-button @click="onDeleteRectangles">Delete Rectangles</b-button>
         </b-button-group>
       </b-row>
       <b-row align-h="center">
@@ -116,14 +99,37 @@
         >
           <CircleComponent
             v-for="(circle, index) in circles"
-            :key="index"
+            :key="index + circle.id"
             :radius="circle.radius"
             :centerX="circle.x"
             :centerY="circle.y"
             :draggable="currentSelection == ''"
             :canvasWidth="+width"
             :canvasHeight="+height"
-        /></Canvas>
+          />
+          <Rectangle
+            v-for="(rect, index) in rectangles"
+            :key="index + rect.id"
+            :width="rect.width"
+            :height="rect.height"
+            :x="rect.x"
+            :y="rect.y"
+            :draggable="currentSelection == ''"
+            :canvasWidth="+width"
+            :canvasHeight="+height"
+          />
+          <LineComponent
+            v-for="(line, index) in lines"
+            :key="index + line.id"
+            :x1="line.x1"
+            :y1="line.y1"
+            :x2="line.x2"
+            :y2="line.y2"
+            :draggable="currentSelection == ''"
+            :canvasWidth="+width"
+            :canvasHeight="+height"
+          />
+        </Canvas>
       </b-row>
     </b-container>
   </div>
@@ -133,46 +139,60 @@
 import Vue from "vue";
 import Canvas from "./components/Canvas.vue";
 import CircleComponent from "./components/Circle.vue";
+import Rectangle from "./components/Rectangle.vue";
+import LineComponent from "./components/Line.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 export default Vue.extend({
   data: function() {
     return {
       width: 500,
       height: 500,
-      backgroundColor: "#f00",
+      backgroundColor: "#00f",
       visible: false,
       currentSelection: "",
       firstPointX: 0,
       firstPointY: 0,
       selectingFirst: false,
       selecting: false,
-      circles: []
+      circles: [],
+      rectangles: [],
+      lines: []
     };
   },
   components: {
     Canvas,
-    CircleComponent
+    CircleComponent,
+    Rectangle,
+    LineComponent
   },
   methods: {
     onCircleSelect() {
       this.currentSelection = "Circle";
       this.selectingFirst = true;
       this.selecting = true;
+      this.firstPointX = 0;
+      this.firstPointY = 0;
     },
     onRectSelect() {
       this.currentSelection = "Rectangle/Square";
       this.selectingFirst = true;
       this.selecting = true;
+      this.firstPointX = 0;
+      this.firstPointY = 0;
     },
     onLineSelect() {
       this.currentSelection = "Line";
       this.selectingFirst = true;
       this.selecting = true;
+      this.firstPointX = 0;
+      this.firstPointY = 0;
     },
     onDeselect() {
       this.currentSelection = "";
       this.selectingFirst = false;
       this.selecting = false;
+      this.firstPointX = 0;
+      this.firstPointY = 0;
     },
     onMouseClick(event) {
       const canvas = document.querySelector("#canvas");
@@ -201,14 +221,49 @@ export default Vue.extend({
             }
           }
         } else if (this.currentSelection == "Rectangle/Square") {
-          console.log();
+          if (this.selecting) {
+            if (this.selectingFirst == true) {
+              this.firstPointX = x;
+              this.firstPointY = y;
+              this.selectingFirst = false;
+            } else {
+              const rectangle = {
+                x: Math.min(x, this.firstPointX),
+                y: Math.min(y, this.firstPointY),
+                width: Math.abs(x - this.firstPointX),
+                height: Math.abs(y - this.firstPointY),
+                id: new Date().toLocaleString("en-us")
+              };
+              this.rectangles.push(rectangle);
+              this.selectingFirst = true;
+            }
+          }
         } else if (this.currentSelection == "Line") {
-          console.log();
+          if (this.selecting) {
+            if (this.selectingFirst == true) {
+              this.firstPointX = x;
+              this.firstPointY = y;
+              this.selectingFirst = false;
+            } else {
+              const line = {
+                x1: x,
+                y1: y,
+                x2: this.firstPointX,
+                y2: this.firstPointY,
+                id: new Date().toLocaleString("en-us")
+              };
+              this.lines.push(line);
+              this.selectingFirst = true;
+            }
+          }
         }
       }
     },
     onDeleteCircles() {
       this.circles = [];
+    },
+    onDeleteRectangles() {
+      this.rectangles = [];
     }
   }
 });

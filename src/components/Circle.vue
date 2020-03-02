@@ -4,10 +4,11 @@
     :style="{
       height: this.$props.radius + 'px',
       width: this.$props.radius + 'px',
-      top: this.top,
-      left: this.left,
-      backgroundColor: 'black',
+      top: this.top + 'px',
+      left: this.left + 'px',
+      backgroundColor: 'transparent',
       borderRadius: '50%',
+      border: '2px solid black',
       zIndex: 100,
       position: 'absolute',
       display: 'inline-block',
@@ -17,7 +18,7 @@
 </template>
 
 <script>
-import Shape from "./Shape";
+import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component({
@@ -35,12 +36,12 @@ import Component from "vue-class-component";
       pos2: 0,
       pos3: 0,
       pos4: 0,
-      top: this.$props.centerY + "px",
-      left: this.$props.centerX + "px"
+      top: this.$props.centerY,
+      left: this.$props.centerX
     };
   }
 })
-export default class CircleComponent extends Shape {
+export default class CircleComponent extends Vue {
   // Initial data can be declared as instance properties
   // message: string = "Hello!";
 
@@ -77,8 +78,8 @@ export default class CircleComponent extends Shape {
         newX = this.$props.canvasHeight - this.$props.radius;
       if (newY + this.$props.radius > this.$props.canvasWidth)
         newY = this.$props.canvasWidth - this.$props.radius;
-      this.top = newX + "px";
-      this.left = newY + "px";
+      this.top = newX;
+      this.left = newY;
     }
   }
   dragMouseDown(e) {
