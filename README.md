@@ -8,20 +8,19 @@
 - There shall be a class Shape that has
   - name of the shape - string
   - draw() method that draws the shape into canvas.
-- There shall be a Point class that consists of
-  - x coordinate - real number
-  - y coordinate - real number
-- All Shapes shall have a parent class Shape.
-- Line class shall extend Shape class and shall have 
-  - A - Point
-  - B - Point
+- Line class shall have
+  - x1 - real number 
+  - x2 - real number 
+  - y1 - real number 
+  - y2 - real number 
 - Rectangle class shall extend Shape class and shall have
-  - A - Point
-  - B - Point
-  - C - Point
-  - D - Point
+  - x1 - real number 
+  - y1 - real number 
+  - x2 - real number 
+  - y2 - real number 
 - There shall be a Circle class that has 
-  - the center - Point
+  - centerX - real number 
+  - centerY - real number 
   - radius - real number  
 - Canvas class shall have
   - width - integer

@@ -87,6 +87,7 @@
         <b-button-group class="otherMenu">
           <b-button @click="onDeleteCircles">Delete Circles</b-button>
           <b-button @click="onDeleteRectangles">Delete Rectangles</b-button>
+          <b-button @click="onDeleteLines">Delete Lines</b-button>
         </b-button-group>
       </b-row>
       <b-row align-h="center">
@@ -125,7 +126,6 @@
             :y1="line.y1"
             :x2="line.x2"
             :y2="line.y2"
-            :draggable="currentSelection == ''"
             :canvasWidth="+width"
             :canvasHeight="+height"
           />
@@ -264,6 +264,9 @@ export default Vue.extend({
     },
     onDeleteRectangles() {
       this.rectangles = [];
+    },
+    onDeleteLines() {
+      this.lines = [];
     }
   }
 });

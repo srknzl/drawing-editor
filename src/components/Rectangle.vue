@@ -11,7 +11,7 @@
       zIndex: 100,
       position: 'absolute',
       display: 'inline-block',
-      cursor: 'grab'
+      cursor: 'move'
     }"
   ></span>
 </template>
