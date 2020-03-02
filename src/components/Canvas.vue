@@ -1,13 +1,15 @@
 <template>
   <div
     id="canvas"
-    @mousemove="this.$props.mouseMove"
+    @click="this.$props.mouseClick"
     :style="{
       width: this.$props.width + 'px',
       height: this.$props.height + 'px',
       backgroundColor: this.$props.backgroundColor
     }"
-  ></div>
+  >
+    <slot></slot>
+  </div>
 </template>
 
 <script lang="ts">
@@ -17,7 +19,7 @@ export default Vue.extend({
     width: Number,
     height: Number,
     backgroundColor: String,
-    mouseMove: Function
+    mouseClick: Function
   },
   data: function() {
     return {};

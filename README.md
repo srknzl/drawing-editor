@@ -27,6 +27,3 @@
   - width - integer
   - height - integer
   - backgroundColor - html hls color value as string
-- A point shall be able to be draggable
-- A shape shall be able to be draggable, dragging a shape moves all its points at the same time
-- A shape shall be able to be deletable.
