@@ -42,13 +42,6 @@ import Component from "vue-class-component";
   }
 })
 export default class CircleComponent extends Vue {
-  // Initial data can be declared as instance properties
-  // message: string = "Hello!";
-
-  // Component methods can be declared as instance methods
-  // onClick(): void {
-  //   window.alert(this.message);
-  // }
   constructor() {
     super();
   }
